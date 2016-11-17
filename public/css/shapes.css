@@ -1,0 +1,13 @@
+.container {
+    margin: 5px;
+}
+
+.container>svg {
+    padding: 15px;
+}
+
+.shape {
+    display: inline-block;
+    fill: none;
+    stroke-width: 2px;
+}

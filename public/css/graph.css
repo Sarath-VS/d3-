@@ -1,0 +1,11 @@
+.path {
+    stroke: steelblue;
+    fill: none;
+    stroke-width: 2px;
+}
+
+.marker {
+  fill: white;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}

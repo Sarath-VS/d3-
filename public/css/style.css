@@ -1,0 +1,23 @@
+.container {
+    border: 1px solid gray;
+    background-color: rgb(201, 241, 196);
+}
+
+svg {
+    border: 1px solid lightgray;
+    background-color: white;
+}
+
+.grid {
+    stroke: lightgrey;
+}
+
+.path {
+    stroke: steelblue;
+    fill: none;
+    stroke-width: 2px;
+}
+
+.bar {
+  fill: steelblue
+}

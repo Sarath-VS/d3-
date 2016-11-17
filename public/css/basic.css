@@ -1,0 +1,11 @@
+.container {
+    border: 1px solid gray;
+    background-color: rgb(201, 241, 196);
+}
+
+.bar {
+  height: 30px;
+  margin: 2px;
+  text-align: right;
+  background-color: steelblue;
+}

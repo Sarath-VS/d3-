@@ -1,0 +1,23 @@
+.container {
+    border: 1px solid gray;
+    background-color: rgb(201, 241, 196);
+    padding: 5px;
+}
+
+.bar {
+    height: 30px;
+    margin: 2px;
+    text-align: center;
+    color: white;
+}
+
+.round {
+    border-radius: 50px;
+}
+
+.legend {
+    height: 30px;
+    margin: 2px;
+    display: inline-block;
+    padding: 0px 20px;
+}
