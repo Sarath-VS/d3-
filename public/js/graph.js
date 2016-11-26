@@ -13,64 +13,6 @@ const _yScale = d3.scaleLinear()
     .domain(DEFAULT_SCALE)
     .range([INNER_HEIGHT, 0]);
 
-var createGraph = () => {
-    var svg = d3.select('.container').append('svg')
-        .attr('width', WIDTH)
-        .attr('height', HEIGHT);
-
-    var xAxis = d3.axisBottom(_xScale).ticks(10).tickFormat((d) => d / 10);
-    var yAxis = d3.axisLeft(_yScale).ticks(10).tickFormat((d) => d / 10);
-
-    svg.append('g')
-        .attr('transform', translate(MARGIN, HEIGHT - MARGIN))
-        .call(xAxis)
-        .classed('xAxis', true);
-
-    svg.append('g')
-        .attr('transform', translate(MARGIN, MARGIN))
-        .call(yAxis)
-        .classed('yAxis', true)
-
-    return svg;
-}
-
-var addLineChart = (graph, datum, name, xScale, yScale) => {
-    var g = graph.append('g')
-        .attr('transform', translate(MARGIN, MARGIN))
-        .classed(name, true);
-
-    var line = d3.line()
-        .x(xScale)
-        .y(yScale);
-
-    g.append('path')
-        .classed('path', true)
-        .attr('d', line(datum));
-
-    addMarker(g, datum, xScale, yScale);
-
-    g.selectAll('path').exit().remove();
-}
-
-var addMarker = (graph, datum, xScale, yScale) => {
-    graph.selectAll('marker')
-        .data(datum)
-        .enter().append('circle')
-        .classed('marker', true)
-        .attr('r', 5)
-        .attr('cx', xScale)
-        .attr('cy', yScale);
-}
-
-var toggleMarker = (() => {
-    var enabled = true;
-    return () => {
-        var markers = d3.selectAll('.marker');
-        enabled ? markers.attr('visibility', 'hidden') : markers.attr('visibility', 'visible');
-        enabled = !enabled;
-    }
-})()
-
 var nxScale = ([x, y]) => _xScale(x);
 var nyScale = ([x, y]) => _yScale(y);
 var pxScale = (d) => _xScale(d);
@@ -90,7 +32,26 @@ window.onload = () => {
     ];
     var oneToTen = rangeOf(0, 10);
 
-    var graph = createGraph();
-    addLineChart(graph, points, 'points', nxScale, nyScale);
-    addLineChart(graph, oneToTen, 'sine', pxScale, sineScale)
+    curves.forEach((curve) => {
+        var xAxis = d3.axisBottom(_xScale).ticks(10).tickFormat((d) => d / 10);
+        var yAxis = d3.axisLeft(_yScale).ticks(10).tickFormat((d) => d / 10);
+
+        var graph = createGraph(WIDTH, HEIGHT, MARGIN, xAxis, yAxis)
+        addLineChart(graph, points, {
+            name: 'points',
+            margin: MARGIN,
+            color: 'brown',
+            xScale: nxScale,
+            yScale: nyScale,
+            curve: curve
+        });
+        addLineChart(graph, oneToTen, {
+            name: 'sine',
+            color: 'steelblue',
+            margin: MARGIN,
+            xScale: pxScale,
+            yScale: sineScale,
+            curve: curve
+        })
+    })
 }

@@ -1,0 +1,16 @@
+.marker {
+    fill: white;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+
+.area {
+    stroke: lightsteelblue;
+    fill: lightsteelblue;
+}
+
+.line {
+    stroke: steelblue;
+    stroke-width: 2px;
+    fill: none;
+}
