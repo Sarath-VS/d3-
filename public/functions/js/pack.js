@@ -1,5 +1,5 @@
 var width = 960,
-    height = 600,
+    height = 960,
     cx = width / 2,
     cy = height / 2,
     totalNodes = 15,
@@ -21,38 +21,49 @@ var drawButtons = (data) => {
         // .attr('onclick', (d) => )
 }
 
-var drawPack = (svg, data, color) => {
-    var pack = d3.packSiblings(data);
-
+var drawPack = (svg, root, color) => {
     var g = svg.append('g');
+    var pack = d3.pack()
+        .size([width / 2 - 4, width / 2 - 4]);
 
-    g.selectAll('circle').data(pack)
-        .enter()
-        .append('circle')
-        .attr('r', (d) => d.r)
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y)
-        .style('fill', color)
-        .append("svg:title")
-        .text((d) => d.r)
-        // .call(d3.forceCenter([cx, cy]).drag())
+    root = d3.hierarchy(root)
+        .sum(function(d) {
+            return d.r;
+        })
+        .sort(function(a, b) {
+            return b.value - a.value;
+        });
 
-    g.attr('transform', translate(cx, cy));
+    var node = g.selectAll('.node')
+        .data(pack(root).descendants())
+        .enter().append('g')
+        .attr('class', function(d) {
+            return d.children ? 'node' : 'leaf node';
+        })
+        .attr('transform', function(d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+        });
+
+    node.append('circle')
+        .attr('r', function(d) {
+            return d.r;
+        });
+
+    // var g = svg.append('g');
+    //
+    // g.selectAll('circle').data(pack)
+    //     .enter()
+    //     .append('circle')
+    //     .attr('r', (d) => d.r)
+    //     .attr('cx', (d) => d.x)
+    //     .attr('cy', (d) => d.y)
+    //     .style('fill', color)
+    //     .append('svg:title')
+    //     .text((d) => d.r)
+    //     // .call(d3.forceCenter([cx, cy]).drag())
+    //
+    // g.attr('transform', translate(cx, cy));
 }
-
-var nodeData = [{
-    "r": 80
-}, {
-    "r": 55
-}, {
-    "r": 35
-}, {
-    "r": 5
-}, {
-    "r": 70
-}, {
-    "r": 25
-}];
 
 window.onload = () => {
     var svg = createSvg('.container', 'circles', width, height);
@@ -60,7 +71,5 @@ window.onload = () => {
     var buttons = ['min', 'max', 'extend', 'sum', 'mean', 'median', 'quantile'];
     drawButtons(buttons);
 
-    drawPack(svg, nodeData, 'steelblue');
-    drawPack(svg, nodeData.reverse(), 'lightgray');
-    // drawPack(svg, nodeData, 'rgb(110, 206, 227)');
+    d3.json('data/circles.json', (err, data) => drawPack(svg, data, 'steelblue'))
 }
